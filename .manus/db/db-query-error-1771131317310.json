@@ -1,0 +1,8 @@
+{
+  "query": "SELECT name, LEFT(resultsJson, 300) as sample FROM sizing_scenarios LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user WppNDVr875gMGT3.root --database eBj8GW56YFcGrcVu2JzQt7 --execute SELECT name, LEFT(resultsJson, 300) as sample FROM sizing_scenarios LIMIT 1;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 1: Table 'ebj8gw56yfcgrcvu2jzqt7.sizing_scenarios' doesn't exist"
+  ]
+}

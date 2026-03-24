@@ -1,0 +1,35 @@
+{
+  "query": "SELECT id, name, resultsJson IS NOT NULL as has_results FROM sizingScenarios LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user WppNDVr875gMGT3.root --database eBj8GW56YFcGrcVu2JzQt7 --execute SELECT id, name, resultsJson IS NOT NULL as has_results FROM sizingScenarios LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Test Scenario",
+      "has_results": "1"
+    },
+    {
+      "id": "2",
+      "name": "Test Scenario",
+      "has_results": "1"
+    },
+    {
+      "id": "3",
+      "name": "Test Scenario",
+      "has_results": "1"
+    },
+    {
+      "id": "4",
+      "name": "Updated Name",
+      "has_results": "1"
+    },
+    {
+      "id": "6",
+      "name": "Scenario 1",
+      "has_results": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\thas_results\n1\tTest Scenario\t1\n2\tTest Scenario\t1\n3\tTest Scenario\t1\n4\tUpdated Name\t1\n6\tScenario 1\t1\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

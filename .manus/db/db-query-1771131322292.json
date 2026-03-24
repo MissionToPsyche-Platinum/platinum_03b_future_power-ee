@@ -1,0 +1,13 @@
+{
+  "query": "SELECT resultsJson FROM sizingScenarios LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user WppNDVr875gMGT3.root --database eBj8GW56YFcGrcVu2JzQt7 --execute SELECT resultsJson FROM sizingScenarios LIMIT 1;",
+  "rows": [
+    {
+      "resultsJson": "{\"solution\":{\"pvArea\":14.42,\"batteryCapacity\":394,\"totalMass\":35.4,\"totalCost\":60000,\"energyMargin\":171.4,\"minSOC\":20,\"feasible\":true}}"
+    }
+  ],
+  "messages": [],
+  "stdout": "resultsJson\n{\"solution\":{\"pvArea\":14.42,\"batteryCapacity\":394,\"totalMass\":35.4,\"totalCost\":60000,\"energyMargin\":171.4,\"minSOC\":20,\"feasible\":true}}\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}
