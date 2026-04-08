@@ -1,9 +1,0 @@
-{
-  "query": "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'ebj8gw56yfcgrcvu2jzqt7';",
-  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user WppNDVr875gMGT3.root --database eBj8GW56YFcGrcVu2JzQt7 --execute SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'ebj8gw56yfcgrcvu2jzqt7';",
-  "rows": [],
-  "messages": [],
-  "stdout": "",
-  "stderr": "",
-  "execution_time_ms": 56
-}
