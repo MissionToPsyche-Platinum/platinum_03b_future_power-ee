@@ -3,12 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/platinum_03b_future_power-ee/favicon.ico" />
+    <script>
+      // SPA redirect handler for GitHub Pages
+      (function() {
+        var redirect = sessionStorage.getItem('redirect');
+        if (redirect) {
+          sessionStorage.removeItem('redirect');
+          if (redirect !== window.location.pathname + window.location.search + window.location.hash) {
+            window.history.replaceState(null, null, '/platinum_03b_future_power-ee' + redirect);
+          }
+        }
+      })();
+    </script>
     <title>16 Psyche Power System Simulator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/platinum_03b_future_power-ee/assets/index-static-BGLwRyUo.js"></script>
+    <script type="module" crossorigin src="/platinum_03b_future_power-ee/assets/index-static-C94bQmR8.js"></script>
     <link rel="stylesheet" crossorigin href="/platinum_03b_future_power-ee/assets/index-static-B2cYnQfD.css">
   </head>
   <body>
