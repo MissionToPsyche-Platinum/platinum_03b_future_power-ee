@@ -39,7 +39,7 @@ function AppRoutes() {
 
 function App() {
   // (This will equal "/platinum_03b_future_power-ee/")
-  const base = import.meta.env.BASE_URL;
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
   return (
     <ErrorBoundary>
