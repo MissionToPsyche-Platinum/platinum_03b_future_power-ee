@@ -5,10 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Play, Calendar, TrendingDown, Battery, Zap, FileDown, Home, Info } from "lucide-react";
+import { Loader2, Play, Calendar, TrendingDown, Battery, Zap, FileDown, Info } from "lucide-react";
 import { toast } from "sonner";
 import { generateTimelinePDF, downloadPDF } from "@/lib/timelinePdfGenerator";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 export default function MissionTimeline() {
@@ -112,12 +113,7 @@ export default function MissionTimeline() {
               Multi-phase mission simulation with environmental degradation modeling
             </p>
           </div>
-          <Link href="/">
-            <Button variant="outline">
-              <Home className="w-4 h-4 mr-2" />
-              Return Home
-            </Button>
-          </Link>
+          <HomeButton />
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

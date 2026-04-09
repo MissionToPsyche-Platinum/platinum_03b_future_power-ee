@@ -99,6 +99,7 @@ function calculateConcentratorPower(
  * @param pvEfficiency - Base PV efficiency (0-1)
  * @param tempCoefficient - Temperature coefficient (%/K)
  * @param surfaceTemp - Current surface temperature in Kelvin
+ * @param sunAngle - Current sun angle in radians
  * @returns Electrical power output in Watts
  */
 function calculatePVPower(
@@ -107,15 +108,24 @@ function calculatePVPower(
   pvArea: number,
   pvEfficiency: number,
   tempCoefficient: number,
-  surfaceTemp: number
+  surfaceTemp: number,
+  sunAngle: number
 ): number {
   // Temperature effect on efficiency
   const tempDelta = surfaceTemp - PSYCHE_CONSTANTS.TEMP_REF;
   const efficiencyAdjustment = 1 + (tempCoefficient * tempDelta);
   const actualEfficiency = pvEfficiency * Math.max(0.1, efficiencyAdjustment);
   
-  // Power output
-  return concentratedPower * actualEfficiency;
+  // Power from concentrated light
+  const concentratedElectricalPower = concentratedPower * actualEfficiency;
+  
+  // Power from direct PV area (not under concentrator)
+  const irradiance = getSolarIrradiance();
+  const cosineLoss = Math.max(0, Math.cos(sunAngle));
+  const directPVPower = irradiance * pvArea * actualEfficiency * cosineLoss;
+  
+  // Total power output
+  return concentratedElectricalPower + directPVPower;
 }
 
 /**
@@ -348,7 +358,8 @@ export async function runSimulation(
       config.pvArea,
       pvEff,
       pvCell.temp_coefficient ?? -0.003,
-      surfaceTemp
+      surfaceTemp,
+      sunAngle
     );
     
     // Calculate power consumption
@@ -427,13 +438,13 @@ export async function runSimulation(
   
   // System health score (0-5)
   let healthScore = 0;
-  if (minSOC > 0.20) healthScore += 1;
+  if (minSOC > 0.15) healthScore += 1;
   if (minSOC > 0.40) healthScore += 1;
   if (energyBalance > 0) healthScore += 1;
   if (finalSOC > 0.70) healthScore += 1;
   if (avgPowerGenerated > avgPowerConsumed * 1.2) healthScore += 1;
   
-  const viable = minSOC > 0.20 && energyBalance > 0;
+  const viable = minSOC >= 0.15 && energyBalance > 0;
   
   // NEW: Calculate additional metrics for accuracy improvements
   const avgBatteryTemp = temperature.reduce((a, b) => a + b, 0) / temperature.length;

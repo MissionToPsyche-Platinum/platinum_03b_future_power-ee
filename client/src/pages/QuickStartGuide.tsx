@@ -7,6 +7,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import { Home, Download, BookOpen } from "lucide-react";
 
 export default function QuickStartGuide() {
@@ -30,12 +31,7 @@ export default function QuickStartGuide() {
                   Download PDF
                 </Button>
               </a>
-              <Link href="/">
-                <Button variant="outline" className="bg-transparent border-blue-400 text-blue-200 hover:bg-blue-800/50">
-                  <Home className="w-4 h-4 mr-2" />
-                  Return Home
-                </Button>
-              </Link>
+          <HomeButton />
             </div>
           </div>
         </div>

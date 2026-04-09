@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, ArrowLeft, TrendingUp, TrendingDown, Download, Info } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import {
   LineChart,
   Line,
@@ -246,19 +247,13 @@ export default function AccuracyComparison() {
       <div className="container py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="outline" size="icon">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-4xl font-bold text-white">Accuracy Comparison Dashboard</h1>
-              <p className="text-slate-300 mt-2">
-                Compare simple vs. NASA-validated simulation models to see the impact of accuracy improvements
-              </p>
-            </div>
+          <div>
+            <h1 className="text-4xl font-bold text-white">Accuracy Comparison Dashboard</h1>
+            <p className="text-slate-300 mt-2">
+              Compare simple vs. NASA-validated simulation models to see the impact of accuracy improvements
+            </p>
           </div>
+          <div className="flex items-center gap-4">
           {results && (
             <Button
               onClick={() => handleExportPDF()}
@@ -269,6 +264,8 @@ export default function AccuracyComparison() {
               Export PDF Report
             </Button>
           )}
+            <HomeButton />
+          </div>
         </div>
 
         {/* Configuration Panel */}

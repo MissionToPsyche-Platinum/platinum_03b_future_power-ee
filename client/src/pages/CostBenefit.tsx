@@ -15,13 +15,15 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, DollarSign, Scale, AlertTriangle, TrendingUp, FileDown, Save, BookmarkPlus, Home, Info } from "lucide-react";
+import { Loader2, DollarSign, Scale, AlertTriangle, TrendingUp, FileDown, Save, BookmarkPlus, Info } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { localCostBenefit } from "@/lib/localStore";
 import { toast } from "sonner";
 import { generateCostBenefitPDF, downloadPDF } from "@/lib/costBenefitPdfGenerator";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 
 export default function CostBenefit() {
   // Form state
@@ -95,6 +97,29 @@ export default function CostBenefit() {
   const handleSaveScenario = () => {
     if (!analysis || !scenarioName.trim()) {
       toast.error("Please enter a scenario name");
+      return;
+    }
+
+    if (!user) {
+      // No authentication — save to localStorage
+      localCostBenefit.save({
+        name: scenarioName.trim(),
+        description: scenarioDescription.trim() || null,
+        notes: scenarioNotes.trim() || null,
+        tags: null,
+        avgPower: averagePower,
+        peakPower,
+        missionDuration,
+        concentrator: concentratorId || "None",
+        pvCell: pvCellId,
+        battery: batteryId,
+        resultsJson: JSON.stringify(analysis),
+      });
+      toast.success("Scenario saved locally! (visible in Compare Scenarios)");
+      setShowSaveDialog(false);
+      setScenarioName("");
+      setScenarioDescription("");
+      setScenarioNotes("");
       return;
     }
     
@@ -199,12 +224,7 @@ export default function CostBenefit() {
                 </p>
               </div>
             </div>
-            <Link href="/">
-              <Button variant="outline" className="border-purple-500/20 text-purple-300 hover:bg-purple-900/20">
-                <Home className="w-4 h-4 mr-2" />
-                Return Home
-              </Button>
-            </Link>
+          <HomeButton />
           </div>
         </div>
       </div>

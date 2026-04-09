@@ -1,0 +1,61 @@
+version: "3.9"
+
+# ============================================================
+# 16 Psyche Power System Simulator — Docker Compose
+# Includes: app server + MySQL database
+# Usage: docker-compose up -d
+# ============================================================
+
+services:
+  app:
+    build: .
+    container_name: psyche-simulator
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://psyche_user:psyche_password@db:3306/psyche_db
+      - JWT_SECRET=${JWT_SECRET:-change-this-to-a-random-secret-at-least-32-chars}
+      - VITE_APP_TITLE=${VITE_APP_TITLE:-16 Psyche Power System Simulator}
+      # Uncomment and set these for AI features:
+      # - BUILT_IN_FORGE_API_URL=${BUILT_IN_FORGE_API_URL}
+      # - BUILT_IN_FORGE_API_KEY=${BUILT_IN_FORGE_API_KEY}
+      # Uncomment and set these for S3 file storage:
+      # - S3_BUCKET=${S3_BUCKET}
+      # - S3_REGION=${S3_REGION}
+      # - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      # - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - psyche-network
+
+  db:
+    image: mysql:8.0
+    container_name: psyche-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: psyche_db
+      MYSQL_USER: psyche_user
+      MYSQL_PASSWORD: psyche_password
+    volumes:
+      - psyche-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "psyche_user", "-ppsyche_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - psyche-network
+
+volumes:
+  psyche-db-data:
+    driver: local
+
+networks:
+  psyche-network:
+    driver: bridge

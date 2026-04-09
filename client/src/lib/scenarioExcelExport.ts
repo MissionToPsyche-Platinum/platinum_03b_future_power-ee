@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import type { SizingScenario, CostBenefitScenario } from "../../../drizzle/schema";
+import type { SizingScenarioLike as SizingScenario, CostBenefitScenarioLike as CostBenefitScenario } from "./scenarioTypes";
 
 /**
  * Export sizing scenarios to CSV format

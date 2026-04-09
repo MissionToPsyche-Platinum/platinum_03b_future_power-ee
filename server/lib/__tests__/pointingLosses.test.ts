@@ -132,22 +132,23 @@ describe('Solar Array Pointing Losses', () => {
 
   describe('Integration with power simulation', () => {
     it('should produce realistic pointing loss factors for Psyche mission', () => {
-      // Psyche is a flagship-class mission
-      const params = getTypicalPointingParams('flagship');
+      // Psyche is a Discovery-class mission (Discovery Mission #14)
+      // Solar arrays are single-axis gimbaled; attitude accuracy ~1.5°
+      const params = getTypicalPointingParams('discovery');
       const result = calculatePointingLosses(params);
 
-      // For Psyche mission, expect:
-      // - Very good attitude control (<1° error)
-      // - Minimal power losses (<0.5%)
-      expect(result.avgOffPointingAngle).toBeLessThan(1.0);
-      expect(result.avgCosineLoss).toBeGreaterThan(0.995);
+      // For Psyche mission (Discovery class), expect:
+      // - Moderate attitude control (single-axis gimbal, ~1.5° accuracy)
+      // - Small but non-negligible power losses (<2%)
+      expect(result.avgOffPointingAngle).toBeLessThan(2.0);
+      expect(result.avgCosineLoss).toBeGreaterThan(0.99);
 
-      // Apply to typical Psyche power level (~2kW)
-      const psychePower = 2000; // W
+      // Apply to typical Psyche power level at asteroid (~2.7kW at 3.1 AU)
+      const psychePower = 2700; // W
       const actualPower = applyPointingLosses(psychePower, result);
       const lossPercent = ((psychePower - actualPower) / psychePower) * 100;
 
-      expect(lossPercent).toBeLessThan(0.5); // <0.5% loss for flagship mission
+      expect(lossPercent).toBeLessThan(2.0); // <2% loss for Discovery-class mission
     });
   });
 });

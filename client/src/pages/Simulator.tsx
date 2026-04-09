@@ -14,14 +14,15 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Loader2, Rocket, Zap, Battery, Sun, TrendingUp, AlertCircle, Download, Save, Home, Info } from "lucide-react";
+import { Loader2, Rocket, Zap, Battery, Sun, TrendingUp, AlertCircle, Download, Save, Info } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import { PresetSelector } from "./SimulatorPresets";
 import { generatePDFReport, downloadPDF } from "@/lib/pdfGenerator";
 import { validateSimulationConfig, ValidationWarning } from "@/lib/validation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { localConfigs } from "@/lib/localStore";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import {
   LineChart,
@@ -57,7 +58,7 @@ export default function Simulator() {
   const [baseLoad, setBaseLoad] = useState(100);
   const [durationHours, setDurationHours] = useState(48);
   const [yearsOperation, setYearsOperation] = useState(0);
-  const [spacecraftClass, setSpacecraftClass] = useState<string>("flagship");
+  const [spacecraftClass, setSpacecraftClass] = useState<string>("discovery");
   const [useAdvancedModels, setUseAdvancedModels] = useState(true);
 
   // Validate parameters and generate warnings
@@ -135,16 +136,35 @@ export default function Simulator() {
 
   // Handle save configuration
   const handleSaveConfiguration = () => {
-    if (!user) {
-      toast.error("Please log in to save configurations");
-      return;
-    }
     if (!configName.trim()) {
       toast.error("Please enter a configuration name");
       return;
     }
     if (!selectedPV || !selectedBattery) {
       toast.error("Please select PV cell and battery");
+      return;
+    }
+
+    if (!user) {
+      // No authentication — save to localStorage so Compare Configurations still works
+      localConfigs.save({
+        name: configName,
+        description: configDescription || null,
+        concentrator: selectedConcentrator || null,
+        pvCell: selectedPV,
+        battery: selectedBattery,
+        concentratorArea,
+        pvArea,
+        batteryCapacity,
+        baseLoad,
+        durationHours,
+        yearsOperation,
+        lastSimulationId: null,
+      });
+      toast.success("Configuration saved locally! (visible in Compare Configurations)");
+      setSaveDialogOpen(false);
+      setConfigName("");
+      setConfigDescription("");
       return;
     }
 
@@ -270,12 +290,7 @@ export default function Simulator() {
             <Rocket className="w-8 h-8 text-primary" />
             <h1 className="text-4xl font-bold">16 Psyche Power System Simulator</h1>
           </div>
-          <Link href="/">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Home className="w-4 h-4" />
-              Return Home
-            </Button>
-          </Link>
+          <HomeButton />
         </div>
         <p className="text-muted-foreground text-lg">
           Design and simulate power systems for NASA's mission to asteroid 16 Psyche at 2.9 AU from the Sun
@@ -429,8 +444,7 @@ export default function Simulator() {
                     <TooltipContent className="max-w-xs">
                       <p className="font-semibold mb-1">Spacecraft Class</p>
                       <p className="text-sm">
-                        Mission category affecting pointing accuracy and cost. Flagship missions (like Psyche) have the best attitude control (~0.5°), 
-                        while SmallSats have looser pointing (~2°). Better pointing means less power loss from solar array misalignment.
+                        Mission category affecting pointing accuracy and cost. Psyche is a Discovery-class mission (~1.5° pointing). Flagship missions (e.g., Cassini, Europa Clipper) have the best attitude control (~0.5°), while SmallSats have the loosest pointing (~2°). Better pointing means less power loss from solar array misalignment.
                       </p>
                     </TooltipContent>
                   </Tooltip>
@@ -440,9 +454,9 @@ export default function Simulator() {
                     <SelectValue placeholder="Select spacecraft class" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="flagship">Flagship (~0.5° pointing)</SelectItem>
+                    <SelectItem value="flagship">Flagship (~0.5° pointing, e.g. Cassini)</SelectItem>
                     <SelectItem value="new-frontiers">New Frontiers (~1° pointing)</SelectItem>
-                    <SelectItem value="discovery">Discovery (~1.5° pointing)</SelectItem>
+                    <SelectItem value="discovery">Discovery (~1.5° pointing) ✓ Psyche</SelectItem>
                     <SelectItem value="smallsat">SmallSat (~2° pointing)</SelectItem>
                   </SelectContent>
                 </Select>

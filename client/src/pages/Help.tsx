@@ -7,6 +7,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import { Home, Rocket, Calculator, DollarSign, Clock, GitCompare, Zap, BookOpen, Download, HelpCircle } from "lucide-react";
 
 export default function Help() {
@@ -23,12 +24,7 @@ export default function Help() {
                 <p className="text-blue-200 mt-1">Complete guide to using the 16 Psyche Power System Simulator</p>
               </div>
             </div>
-            <Link href="/">
-              <Button variant="outline" className="bg-transparent border-blue-400 text-blue-200 hover:bg-blue-800/50">
-                <Home className="w-4 h-4 mr-2" />
-                Return Home
-              </Button>
-            </Link>
+          <HomeButton />
           </div>
         </div>
       </div>
@@ -84,6 +80,99 @@ export default function Help() {
               <div>
                 <h3 className="font-semibold text-blue-300">Run Simulation</h3>
                 <p className="text-slate-300 text-sm">Click "Run Simulation" to see power generation profiles, battery state of charge, and system viability assessment.</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Reference Card Download */}
+        <Card className="bg-slate-800/50 border-blue-500/20 mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Download className="w-6 h-6 text-green-400" />
+              Printable Reference Card
+            </CardTitle>
+            <CardDescription className="text-blue-200">
+              Single-page PDF with condensed diagram, key equations, and quick-reference parameter ranges
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-slate-300">
+                Download this comprehensive reference card for offline use. Perfect for quick lookups during mission planning or as a study guide for understanding power system design principles.
+              </p>
+              <div className="bg-slate-900/50 border border-blue-500/20 rounded-lg p-4">
+                <h4 className="text-white font-semibold mb-2">Includes:</h4>
+                <ul className="text-slate-300 text-sm space-y-1">
+                  <li>• Complete power system architecture diagram</li>
+                  <li>• Key equations for solar power generation and battery SOC</li>
+                  <li>• Quick-reference tables for all component technologies</li>
+                  <li>• Typical parameter ranges and configuration guidelines</li>
+                  <li>• Common pitfalls and simulation best practices</li>
+                </ul>
+              </div>
+              <a 
+                href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663141697743/NEeocnBauLoVakHo.pdf" 
+                download="16_Psyche_Reference_Card.pdf"
+                className="inline-block"
+              >
+                <Button className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Reference Card (PDF)
+                </Button>
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Power System Architecture Diagram */}
+        <Card className="bg-slate-800/50 border-blue-500/20 mb-6">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Zap className="w-6 h-6 text-blue-400" />
+              Power System Architecture
+            </CardTitle>
+            <CardDescription className="text-blue-200">
+              Complete system diagram showing all components, variables, and connections
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <img 
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663141697743/FGuqTzHlfZTdtffU.png" 
+              alt="Power System Architecture Diagram showing solar concentrators, PV cells, batteries, charge controller, and inverter with all variables and connections"
+              className="w-full rounded-lg border border-blue-500/30 bg-slate-900/50"
+            />
+            <div className="mt-4 space-y-2 text-slate-300 text-sm">
+              <p>
+                This comprehensive diagram illustrates the complete power system architecture modeled by the simulator. 
+                It shows how sunlight is collected by solar concentrators, converted to electricity by photovoltaic cells, 
+                stored in batteries, and delivered to spacecraft loads through charge controllers and inverters.
+              </p>
+              <div className="grid md:grid-cols-2 gap-3 mt-3">
+                <div className="bg-slate-700/50 p-3 rounded">
+                  <h4 className="font-semibold text-blue-300 mb-1">Environmental Variables</h4>
+                  <p className="text-xs">Distance from Sun, asteroid rotation, radiation levels, temperature, and solar irradiance</p>
+                </div>
+                <div className="bg-slate-700/50 p-3 rounded">
+                  <h4 className="font-semibold text-orange-300 mb-1">Photovoltaic Cell Variables</h4>
+                  <p className="text-xs">Cell type, panel efficiency, area, peak power, current/voltage characteristics</p>
+                </div>
+                <div className="bg-slate-700/50 p-3 rounded">
+                  <h4 className="font-semibold text-purple-300 mb-1">Concentrator Variables</h4>
+                  <p className="text-xs">Concentration ratio, optical efficiency, tracking accuracy, effective irradiance</p>
+                </div>
+                <div className="bg-slate-700/50 p-3 rounded">
+                  <h4 className="font-semibold text-yellow-300 mb-1">Battery Variables</h4>
+                  <p className="text-xs">Battery type, capacity, charge/discharge efficiency, max charge/discharge rate, state of charge limits</p>
+                </div>
+                <div className="bg-slate-700/50 p-3 rounded">
+                  <h4 className="font-semibold text-green-300 mb-1">Load Variables</h4>
+                  <p className="text-xs">Base load, instrument load, communication load, heater load, peak load requirements</p>
+                </div>
+                <div className="bg-slate-700/50 p-3 rounded">
+                  <h4 className="font-semibold text-cyan-300 mb-1">Inverter Variables</h4>
+                  <p className="text-xs">Inverter efficiency, nominal power, voltage/current curves for AC conversion</p>
+                </div>
               </div>
             </div>
           </CardContent>

@@ -195,6 +195,32 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Power System Diagram */}
+        <div className="mt-16 max-w-5xl mx-auto">
+          <Card className="bg-white/5 backdrop-blur border-white/10">
+            <CardHeader>
+              <CardTitle className="text-white text-2xl flex items-center gap-2">
+                <Info className="w-6 h-6 text-blue-400" />
+                Power System Architecture
+              </CardTitle>
+              <CardDescription className="text-blue-200">
+                Complete system diagram showing all components, variables, and electrical connections
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <img 
+                src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663141697743/FGuqTzHlfZTdtffU.png" 
+                alt="Power System Architecture Diagram showing solar concentrators, PV cells, batteries, charge controller, and inverter with all variables and connections"
+                className="w-full rounded-lg border border-white/20"
+              />
+              <p className="text-blue-200 text-sm mt-4 text-center">
+                This diagram illustrates the complete power system architecture including environmental variables, 
+                component specifications, load profiles, and electrical connections between all subsystems.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Mission Info */}
         <div className="mt-16 max-w-4xl mx-auto">
           <Card className="bg-white/5 backdrop-blur border-white/10">
@@ -234,8 +260,40 @@ export default function Home() {
           </Card>
         </div>
 
+        {/* Partner Logos */}
+        <div className="mt-16 mb-8">
+          <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-wrap items-center justify-center gap-12">
+              <a 
+                href="https://engineering.asu.edu" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-80"
+              >
+                <img 
+                  src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663141697743/tuLJEtzTGnvWRhsU.png" 
+                  alt="ASU Ira A. Fulton Schools of Engineering" 
+                  className="h-16 w-auto"
+                />
+              </a>
+              <a 
+                href="https://www.nasa.gov" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-80"
+              >
+                <img 
+                  src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663141697743/uLFrZqwtVdrizcWW.png" 
+                  alt="NASA" 
+                  className="h-16 w-auto"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
-        <div className="mt-12 text-center text-blue-300 text-sm">
+        <div className="mt-8 text-center text-blue-300 text-sm">
           <p>Simulation based on NASA mission parameters and peer-reviewed space power systems research</p>
         </div>
       </div>

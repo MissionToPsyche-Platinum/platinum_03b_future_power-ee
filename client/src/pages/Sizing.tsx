@@ -14,13 +14,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Calculator, CheckCircle2, AlertTriangle, FileDown, Save, BookmarkPlus, Home, Info } from "lucide-react";
+import { Loader2, Calculator, CheckCircle2, AlertTriangle, FileDown, Save, BookmarkPlus, Info } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { localSizing } from "@/lib/localStore";
 import { toast } from "sonner";
 import { generateSizingPDF, downloadPDF } from "@/lib/sizingPdfGenerator";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 
 export default function Sizing() {
   // Form state
@@ -97,6 +99,34 @@ export default function Sizing() {
   const handleSaveScenario = () => {
     if (!solution || !scenarioName.trim()) {
       toast.error("Please enter a scenario name");
+      return;
+    }
+
+    if (!user) {
+      // No authentication — save to localStorage
+      localSizing.save({
+        name: scenarioName.trim(),
+        description: scenarioDescription.trim() || null,
+        notes: scenarioNotes.trim() || null,
+        tags: null,
+        avgPower: averagePowerLoad,
+        peakPower: peakPowerLoad,
+        energyMargin: minEnergyMargin,
+        minSOC: minBatterySOC,
+        eclipseDuration: Math.round(eclipseDuration * 100),
+        missionDuration,
+        maxMass: maxTotalMass,
+        maxCost: maxTotalCost,
+        concentrator: concentratorId || "None",
+        pvCell: pvCellId,
+        battery: batteryId,
+        resultsJson: JSON.stringify({ solution, recommendations }),
+      });
+      toast.success("Scenario saved locally! (visible in Compare Scenarios)");
+      setShowSaveDialog(false);
+      setScenarioName("");
+      setScenarioDescription("");
+      setScenarioNotes("");
       return;
     }
     
@@ -189,12 +219,7 @@ export default function Sizing() {
                 </p>
               </div>
             </div>
-            <Link href="/">
-              <Button variant="outline" className="border-blue-500/20 text-blue-300 hover:bg-blue-900/20">
-                <Home className="w-4 h-4 mr-2" />
-                Return Home
-              </Button>
-            </Link>
+          <HomeButton />
           </div>
         </div>
       </div>

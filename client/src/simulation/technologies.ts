@@ -1,0 +1,374 @@
+export const TECHNOLOGIES = {
+  "concentrators": [
+    {
+      "name": "None",
+      "concentration_ratio": 1.0,
+      "efficiency": 1.0,
+      "mass_per_m2": 0,
+      "cost_per_m2": 0,
+      "trl": 9,
+      "era": "N/A"
+    },
+    {
+      "name": "Simple Parabolic Mirror",
+      "concentration_ratio": 5.0,
+      "efficiency": 0.65,
+      "mass_per_m2": 8.0,
+      "cost_per_m2": 500,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "Flat Mirror Array",
+      "concentration_ratio": 3.0,
+      "efficiency": 0.7,
+      "mass_per_m2": 6.0,
+      "cost_per_m2": 300,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "Compound Parabolic Concentrator (CPC)",
+      "concentration_ratio": 10.0,
+      "efficiency": 0.82,
+      "mass_per_m2": 5.5,
+      "cost_per_m2": 800,
+      "trl": 8,
+      "era": "Current"
+    },
+    {
+      "name": "Fresnel Lens Concentrator",
+      "concentration_ratio": 15.0,
+      "efficiency": 0.85,
+      "mass_per_m2": 4.0,
+      "cost_per_m2": 1200,
+      "trl": 8,
+      "era": "Current"
+    },
+    {
+      "name": "Parabolic Dish Concentrator",
+      "concentration_ratio": 20.0,
+      "efficiency": 0.88,
+      "mass_per_m2": 7.0,
+      "cost_per_m2": 1500,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "Linear Fresnel Reflector",
+      "concentration_ratio": 12.0,
+      "efficiency": 0.8,
+      "mass_per_m2": 5.0,
+      "cost_per_m2": 900,
+      "trl": 8,
+      "era": "Current"
+    },
+    {
+      "name": "Inflatable Concentrator",
+      "concentration_ratio": 25.0,
+      "efficiency": 0.9,
+      "mass_per_m2": 1.5,
+      "cost_per_m2": 2000,
+      "trl": 5,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Metamaterial Concentrator",
+      "concentration_ratio": 30.0,
+      "efficiency": 0.92,
+      "mass_per_m2": 2.0,
+      "cost_per_m2": 3000,
+      "trl": 3,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Holographic Concentrator",
+      "concentration_ratio": 22.0,
+      "efficiency": 0.87,
+      "mass_per_m2": 1.8,
+      "cost_per_m2": 2500,
+      "trl": 4,
+      "era": "Theoretical"
+    }
+  ],
+  "pv_cells": [
+    {
+      "name": "None",
+      "efficiency": 0.0,
+      "degradation_per_year": 0.0,
+      "mass_per_m2": 0,
+      "cost_per_m2": 0,
+      "temp_coefficient": 0.0,
+      "trl": 9,
+      "era": "N/A"
+    },
+    {
+      "name": "Silicon Solar Cells (Early)",
+      "efficiency": 0.1,
+      "degradation_per_year": 0.015,
+      "mass_per_m2": 2.5,
+      "cost_per_m2": 100,
+      "temp_coefficient": -0.005,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "GaAs Single Junction",
+      "efficiency": 0.18,
+      "degradation_per_year": 0.008,
+      "mass_per_m2": 1.5,
+      "cost_per_m2": 500,
+      "temp_coefficient": -0.004,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "Monocrystalline Silicon",
+      "efficiency": 0.22,
+      "degradation_per_year": 0.005,
+      "mass_per_m2": 2.0,
+      "cost_per_m2": 200,
+      "temp_coefficient": -0.0045,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "Multi-junction GaAs (2J)",
+      "efficiency": 0.28,
+      "degradation_per_year": 0.004,
+      "mass_per_m2": 1.8,
+      "cost_per_m2": 1000,
+      "temp_coefficient": -0.003,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "Triple-junction GaAs (3J)",
+      "efficiency": 0.32,
+      "degradation_per_year": 0.003,
+      "mass_per_m2": 2.0,
+      "cost_per_m2": 1500,
+      "temp_coefficient": -0.0025,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "CIGS Thin Film",
+      "efficiency": 0.2,
+      "degradation_per_year": 0.006,
+      "mass_per_m2": 1.0,
+      "cost_per_m2": 300,
+      "temp_coefficient": -0.0035,
+      "trl": 8,
+      "era": "Current"
+    },
+    {
+      "name": "Perovskite Solar Cells",
+      "efficiency": 0.25,
+      "degradation_per_year": 0.008,
+      "mass_per_m2": 1.2,
+      "cost_per_m2": 150,
+      "temp_coefficient": -0.003,
+      "trl": 6,
+      "era": "Current"
+    },
+    {
+      "name": "Quad-junction (4J) Advanced",
+      "efficiency": 0.38,
+      "degradation_per_year": 0.002,
+      "mass_per_m2": 2.4,
+      "cost_per_m2": 3000,
+      "temp_coefficient": -0.002,
+      "trl": 5,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Quantum Dot Solar Cells",
+      "efficiency": 0.42,
+      "degradation_per_year": 0.002,
+      "mass_per_m2": 1.8,
+      "cost_per_m2": 2500,
+      "temp_coefficient": -0.0015,
+      "trl": 4,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Hot Carrier Solar Cells",
+      "efficiency": 0.48,
+      "degradation_per_year": 0.001,
+      "mass_per_m2": 2.0,
+      "cost_per_m2": 4000,
+      "temp_coefficient": -0.001,
+      "trl": 3,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Tandem Perovskite-Silicon",
+      "efficiency": 0.35,
+      "degradation_per_year": 0.003,
+      "mass_per_m2": 1.6,
+      "cost_per_m2": 500,
+      "temp_coefficient": -0.0022,
+      "trl": 5,
+      "era": "Theoretical"
+    }
+  ],
+  "batteries": [
+    {
+      "name": "None",
+      "energy_density": 0,
+      "cycle_life": 0,
+      "charge_efficiency": 0.0,
+      "discharge_efficiency": 0.0,
+      "self_discharge_rate": 0.0,
+      "mass_per_kwh": 0,
+      "cost_per_kwh": 0,
+      "trl": 9,
+      "era": "N/A"
+    },
+    {
+      "name": "Nickel-Cadmium (NiCd)",
+      "energy_density": 50,
+      "cycle_life": 2000,
+      "charge_efficiency": 0.85,
+      "discharge_efficiency": 0.9,
+      "self_discharge_rate": 0.001,
+      "mass_per_kwh": 20000,
+      "cost_per_kwh": 200,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "Nickel-Hydrogen (NiH2)",
+      "energy_density": 60,
+      "cycle_life": 20000,
+      "charge_efficiency": 0.88,
+      "discharge_efficiency": 0.92,
+      "self_discharge_rate": 0.0005,
+      "mass_per_kwh": 16667,
+      "cost_per_kwh": 800,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "Silver-Zinc (AgZn)",
+      "energy_density": 130,
+      "cycle_life": 100,
+      "charge_efficiency": 0.9,
+      "discharge_efficiency": 0.95,
+      "self_discharge_rate": 0.0015,
+      "mass_per_kwh": 7692,
+      "cost_per_kwh": 2000,
+      "trl": 9,
+      "era": "Historical"
+    },
+    {
+      "name": "Lithium-ion (LiCoO2)",
+      "energy_density": 150,
+      "cycle_life": 1000,
+      "charge_efficiency": 0.92,
+      "discharge_efficiency": 0.95,
+      "self_discharge_rate": 0.0002,
+      "mass_per_kwh": 6667,
+      "cost_per_kwh": 400,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "Lithium-ion (NMC)",
+      "energy_density": 180,
+      "cycle_life": 2000,
+      "charge_efficiency": 0.94,
+      "discharge_efficiency": 0.96,
+      "self_discharge_rate": 0.0001,
+      "mass_per_kwh": 5556,
+      "cost_per_kwh": 480,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "Lithium-ion (LFP)",
+      "energy_density": 120,
+      "cycle_life": 5000,
+      "charge_efficiency": 0.93,
+      "discharge_efficiency": 0.95,
+      "self_discharge_rate": 0.0001,
+      "mass_per_kwh": 8333,
+      "cost_per_kwh": 320,
+      "trl": 9,
+      "era": "Current"
+    },
+    {
+      "name": "Lithium-Polymer",
+      "energy_density": 160,
+      "cycle_life": 1500,
+      "charge_efficiency": 0.93,
+      "discharge_efficiency": 0.95,
+      "self_discharge_rate": 0.0002,
+      "mass_per_kwh": 6250,
+      "cost_per_kwh": 600,
+      "trl": 8,
+      "era": "Current"
+    },
+    {
+      "name": "Solid-State Lithium",
+      "energy_density": 400,
+      "cycle_life": 10000,
+      "charge_efficiency": 0.96,
+      "discharge_efficiency": 0.98,
+      "self_discharge_rate": 5e-05,
+      "mass_per_kwh": 2500,
+      "cost_per_kwh": 1200,
+      "trl": 5,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Lithium-Sulfur",
+      "energy_density": 500,
+      "cycle_life": 3000,
+      "charge_efficiency": 0.94,
+      "discharge_efficiency": 0.96,
+      "self_discharge_rate": 0.0001,
+      "mass_per_kwh": 2000,
+      "cost_per_kwh": 600,
+      "trl": 4,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Lithium-Air",
+      "energy_density": 800,
+      "cycle_life": 1000,
+      "charge_efficiency": 0.9,
+      "discharge_efficiency": 0.92,
+      "self_discharge_rate": 0.0003,
+      "mass_per_kwh": 1250,
+      "cost_per_kwh": 1000,
+      "trl": 3,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Sodium-ion Advanced",
+      "energy_density": 200,
+      "cycle_life": 8000,
+      "charge_efficiency": 0.95,
+      "discharge_efficiency": 0.96,
+      "self_discharge_rate": 0.0001,
+      "mass_per_kwh": 5000,
+      "cost_per_kwh": 240,
+      "trl": 6,
+      "era": "Theoretical"
+    },
+    {
+      "name": "Aluminum-ion",
+      "energy_density": 300,
+      "cycle_life": 20000,
+      "charge_efficiency": 0.96,
+      "discharge_efficiency": 0.97,
+      "self_discharge_rate": 5e-05,
+      "mass_per_kwh": 3333,
+      "cost_per_kwh": 320,
+      "trl": 4,
+      "era": "Theoretical"
+    }
+  ]
+} as const;

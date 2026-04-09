@@ -7,11 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, Sparkles, TrendingUp, Weight, DollarSign, Download, FileJson, Home, Info } from "lucide-react";
+import { Loader2, Sparkles, TrendingUp, Weight, DollarSign, Download, FileJson, Info } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { exportAsJSON, exportAsPDF, type OptimizationResult } from "@/lib/optimizationExport";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function Optimization() {
@@ -308,12 +309,7 @@ export default function Optimization() {
               Find optimal technology combinations using genetic algorithms
             </p>
           </div>
-          <Link href="/">
-            <Button variant="outline" className="border-blue-500/20 text-blue-300 hover:bg-blue-900/20">
-              <Home className="w-4 h-4 mr-2" />
-              Return Home
-            </Button>
-          </Link>
+          <HomeButton />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

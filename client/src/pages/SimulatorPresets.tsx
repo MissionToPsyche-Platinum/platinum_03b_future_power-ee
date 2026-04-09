@@ -2,7 +2,8 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Rocket, Zap } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Sparkles, Rocket, Zap, Info } from "lucide-react";
 
 interface PresetSelectorProps {
   onSelectPreset: (preset: any) => void;
@@ -13,6 +14,7 @@ export function PresetSelector({ onSelectPreset }: PresetSelectorProps) {
   const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
 
   const getPresetColor = (presetName: string) => {
+    if (presetName.includes('Optimal')) return 'from-emerald-500 to-emerald-600';
     if (presetName.includes('Baseline')) return 'from-blue-500 to-blue-600';
     if (presetName.includes('High-Power')) return 'from-purple-500 to-purple-600';
     if (presetName.includes('Minimal')) return 'from-green-500 to-green-600';
@@ -78,7 +80,38 @@ export function PresetSelector({ onSelectPreset }: PresetSelectorProps) {
               }`}
             >
               <div className="flex items-start justify-between gap-2 mb-2">
-                <h4 className="font-semibold">{preset.name}</h4>
+                <div className="flex items-center gap-2">
+                  <h4 className="font-semibold">{preset.name}</h4>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-4 w-4 text-white/70 hover:text-white cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-sm" side="right">
+                      <div className="space-y-2 text-xs">
+                        <div>
+                          <p className="font-semibold mb-1">Viability:</p>
+                          <p className="text-muted-foreground">{preset.tooltip.viability}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold mb-1">Mission Types:</p>
+                          <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
+                            {preset.tooltip.missionTypes.map((type, idx) => (
+                              <li key={idx}>{type}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="font-semibold mb-1">Expected Performance:</p>
+                          <div className="text-muted-foreground space-y-0.5">
+                            <p>• Energy Balance: {preset.tooltip.expectedPerformance.energyBalance}</p>
+                            <p>• Min SOC: {preset.tooltip.expectedPerformance.minSOC}</p>
+                            <p>• Reliability: {preset.tooltip.expectedPerformance.reliability}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
                 <Badge variant="secondary" className={`${getEraColor(preset.era)} flex items-center gap-1`}>
                   {getEraIcon(preset.era)}
                   {preset.era}

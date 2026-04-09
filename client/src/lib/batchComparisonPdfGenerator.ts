@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import type { SizingScenario, CostBenefitScenario } from "../../../drizzle/schema";
+import type { SizingScenarioLike as SizingScenario, CostBenefitScenarioLike as CostBenefitScenario } from "./scenarioTypes";
 
 const COLORS = {
   primary: "#1e3a8a",

@@ -109,14 +109,14 @@ export const appRouter = router({
       }),
 
     // Get user's simulation history
-    getHistory: publicProcedure
+    getHistory: protectedProcedure
       .input(z.object({ limit: z.number().optional() }).optional())
       .query(async ({ ctx, input }) => {
         return await getUserSimulations(ctx.user.id, input?.limit || 10);
       }),
 
     // Get specific simulation by ID
-    getById: publicProcedure
+    getById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         const simulation = await getSimulationById(input.id);
@@ -197,12 +197,12 @@ export const appRouter = router({
 
   // Saved configurations router for comparison mode
   configurations: router({    // List user's saved configurations
-    list: publicProcedure.query(async ({ ctx }) => {
+    list: protectedProcedure.query(async ({ ctx }) => {
       return await getUserSavedConfigurations(ctx.user.id);
     }),
 
     // Get specific configuration by ID
-    getById: publicProcedure
+    getById: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input, ctx }) => {
         const config = await getSavedConfigurationById(input.id);
@@ -217,7 +217,7 @@ export const appRouter = router({
       }),
 
     // Save a new configuration
-    save: publicProcedure
+    save: protectedProcedure
       .input(
         z.object({
           name: z.string().min(1).max(255),
@@ -253,7 +253,7 @@ export const appRouter = router({
       }),
 
     // Update existing configuration
-    update: publicProcedure
+    update: protectedProcedure
       .input(
         z.object({
           id: z.number(),
@@ -286,7 +286,7 @@ export const appRouter = router({
       }),
 
     // Delete configuration
-    delete: publicProcedure
+    delete: protectedProcedure
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input, ctx }) => {
         // Verify ownership first

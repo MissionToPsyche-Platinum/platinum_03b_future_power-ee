@@ -21,8 +21,8 @@ interface SizingScenarioExport {
   pvCell: string;
   battery: string;
   resultsJson: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 interface CostBenefitScenarioExport {
@@ -37,8 +37,8 @@ interface CostBenefitScenarioExport {
   pvCell: string;
   battery: string;
   resultsJson: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 /**

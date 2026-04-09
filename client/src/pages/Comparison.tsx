@@ -4,7 +4,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, TrendingUp, Battery, Zap, AlertCircle } from "lucide-react";
+import { Loader2, TrendingUp, Battery, Zap, AlertCircle, HardDrive } from "lucide-react";
+import HomeButton from "@/components/HomeButton";
 import {
   LineChart,
   Line,
@@ -15,7 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { getLoginUrl } from "@/const";
+import { localConfigs, LocalConfig } from "@/lib/localStore";
 
 const COMPARISON_COLORS = [
   "#3b82f6", // blue
@@ -23,6 +24,21 @@ const COMPARISON_COLORS = [
   "#10b981", // green
   "#f59e0b", // orange
 ];
+
+interface ConfigItem {
+  id: number;
+  name: string;
+  description?: string | null;
+  pvCell: string;
+  battery: string;
+  concentrator?: string | null;
+  concentratorArea: number;
+  pvArea: number;
+  batteryCapacity: number;
+  baseLoad: number;
+  durationHours: number;
+  yearsOperation: number;
+}
 
 interface ComparisonResult {
   configId: number;
@@ -44,12 +60,26 @@ export default function Comparison() {
   const [comparisonResults, setComparisonResults] = useState<ComparisonResult[]>([]);
   const [isComparing, setIsComparing] = useState(false);
 
-  const { data: configurations, isLoading: configsLoading } = trpc.configurations.list.useQuery(
+  // Local (unauthenticated) configurations from localStorage
+  const [localConfigList, setLocalConfigList] = useState<LocalConfig[]>([]);
+
+  useEffect(() => {
+    // Always load local configs so they are available even when not authenticated
+    setLocalConfigList(localConfigs.list());
+  }, []);
+
+  // Server-side configurations (only when authenticated)
+  const { data: serverConfigurations, isLoading: configsLoading } = trpc.configurations.list.useQuery(
     undefined,
     { enabled: !!user }
   );
 
   const runSimulationMutation = trpc.simulation.run.useMutation();
+
+  // Merge server + local configs, deduplicating by name when authenticated
+  const configurations: ConfigItem[] = user
+    ? (serverConfigurations ?? [])
+    : localConfigList;
 
   const toggleConfig = (id: number) => {
     setSelectedConfigs((prev) => {
@@ -113,7 +143,6 @@ export default function Comparison() {
   };
 
   // Prepare chart data
-  // Simulation results have arrays: time[], power_generated[], battery_soc[], etc.
   const powerChartData = comparisonResults.length > 0 && comparisonResults[0]?.results?.time
     ? comparisonResults[0].results.time.map((_: any, idx: number) => {
         const point: any = {
@@ -142,8 +171,6 @@ export default function Comparison() {
       })
     : [];
 
-
-
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -152,34 +179,25 @@ export default function Comparison() {
     );
   }
 
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8C1D40] via-[#8C1D40] to-[#FFC627] p-4">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle>Authentication Required</CardTitle>
-            <CardDescription>
-              Please log in to access the configuration comparison feature.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full">
-              <a href={getLoginUrl()}>Log In</a>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const isLoading = user ? configsLoading : false;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#8C1D40] via-[#8C1D40] to-[#FFC627] p-6">
       <div className="container mx-auto max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Configuration Comparison</h1>
-          <p className="text-white/90">
-            Compare up to 4 saved configurations side-by-side
-          </p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">Configuration Comparison</h1>
+            <p className="text-white/90">
+              Compare up to 4 saved configurations side-by-side
+            </p>
+            {!user && (
+              <p className="text-white/70 text-sm mt-1 flex items-center gap-1">
+                <HardDrive className="h-3 w-3" />
+                Showing locally saved configurations (no login required)
+              </p>
+            )}
+          </div>
+          <HomeButton />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -192,7 +210,7 @@ export default function Comparison() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {configsLoading ? (
+              {isLoading ? (
                 <div className="flex justify-center py-8">
                   <Loader2 className="h-6 w-6 animate-spin" />
                 </div>

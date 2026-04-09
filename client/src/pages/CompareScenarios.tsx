@@ -4,16 +4,17 @@
  * Allows users to select and compare multiple saved scenarios side-by-side
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2, GitCompare, Trash2, ArrowLeft, Download, Upload, Home } from "lucide-react";
+import { Loader2, GitCompare, Trash2, ArrowLeft, Download, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
+import HomeButton from "@/components/HomeButton";
 import { exportMultipleSizingScenariosAsJSON, exportMultipleCostBenefitScenariosAsJSON } from "@/lib/scenarioExport";
 import { generateBatchSizingComparisonPDF, generateBatchCostBenefitComparisonPDF } from "@/lib/batchComparisonPdfGenerator";
 import { exportSizingScenariosToCSV, exportSizingScenariosToExcel, exportCostBenefitScenariosToCSV, exportCostBenefitScenariosToExcel } from "@/lib/scenarioExcelExport";
@@ -23,6 +24,7 @@ import { SizingRadarChart } from "@/components/SizingRadarChart";
 import { CostBenefitRadarChart } from "@/components/CostBenefitRadarChart";
 
 import { Input } from "@/components/ui/input";
+import { localSizing, localCostBenefit } from "@/lib/localStore";
 
 export default function CompareScenarios() {
   const [selectedSizingIds, setSelectedSizingIds] = useState<number[]>([]);
@@ -31,8 +33,17 @@ export default function CompareScenarios() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   
   const { user } = useAuth();
-  
-  // Queries
+
+  // Local (unauthenticated) scenario lists from localStorage
+  const [localSizingList, setLocalSizingList] = useState<ReturnType<typeof localSizing.list>>([]);
+  const [localCostBenefitList, setLocalCostBenefitList] = useState<ReturnType<typeof localCostBenefit.list>>([]);
+
+  useEffect(() => {
+    setLocalSizingList(localSizing.list());
+    setLocalCostBenefitList(localCostBenefit.list());
+  }, []);
+
+  // Queries (only run when authenticated)
   const sizingScenariosQuery = trpc.scenarios.sizing.list.useQuery(undefined, {
     enabled: !!user,
   });
@@ -43,12 +54,12 @@ export default function CompareScenarios() {
   
   const sizingComparisonQuery = trpc.scenarios.sizing.compare.useQuery(
     { ids: selectedSizingIds },
-    { enabled: selectedSizingIds.length > 0 && comparisonType === "sizing" }
+    { enabled: !!user && selectedSizingIds.length > 0 && comparisonType === "sizing" }
   );
   
   const costBenefitComparisonQuery = trpc.scenarios.costBenefit.compare.useQuery(
     { ids: selectedCostBenefitIds },
-    { enabled: selectedCostBenefitIds.length > 0 && comparisonType === "costBenefit" }
+    { enabled: !!user && selectedCostBenefitIds.length > 0 && comparisonType === "costBenefit" }
   );
   
   // Delete mutations
@@ -88,25 +99,17 @@ export default function CompareScenarios() {
   
 
   
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <Card className="bg-slate-800/50 border-purple-500/20 max-w-md">
-          <CardHeader>
-            <CardTitle className="text-white">Login Required</CardTitle>
-            <CardDescription className="text-purple-200">
-              Please log in to compare scenarios
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-    );
-  }
-  
-  const sizingScenarios = sizingScenariosQuery.data || [];
-  const costBenefitScenarios = costBenefitScenariosQuery.data || [];
-  const sizingComparison = sizingComparisonQuery.data || [];
-  const costBenefitComparison = costBenefitComparisonQuery.data || [];
+  // Merge server + local data depending on auth state
+  const sizingScenarios = user ? (sizingScenariosQuery.data || []) : localSizingList;
+  const costBenefitScenarios = user ? (costBenefitScenariosQuery.data || []) : localCostBenefitList;
+
+  // For local comparison, filter by selected IDs directly
+  const sizingComparison = user
+    ? (sizingComparisonQuery.data || [])
+    : localSizing.compare(selectedSizingIds);
+  const costBenefitComparison = user
+    ? (costBenefitComparisonQuery.data || [])
+    : localCostBenefit.compare(selectedCostBenefitIds);
   
   // Debug logging
   console.log('Selected sizing IDs:', selectedSizingIds);
@@ -131,12 +134,7 @@ export default function CompareScenarios() {
                   </p>
                 </div>
               </div>
-              <Link href="/">
-                <Button variant="outline" className="border-purple-500/20 text-purple-300 hover:bg-purple-900/20">
-                  <Home className="w-4 h-4 mr-2" />
-                  Return Home
-                </Button>
-              </Link>
+          <HomeButton />
             </div>
           </div>
         </div>
