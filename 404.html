@@ -4,11 +4,10 @@
   <meta charset="utf-8">
   <title>16 Psyche Power System Simulator</title>
   <script>
-    // GitHub Pages SPA redirect: store the path and redirect to index.html
     var base = '/platinum_03b_future_power-ee';
     var l = window.location;
-    var path = l.pathname.slice(base.length) || '/';
-    sessionStorage.setItem('redirect', path + l.search + l.hash);
+    var p = l.pathname.slice(base.length) || '/';
+    sessionStorage.setItem('redirect', p + l.search + l.hash);
     l.replace(base + '/');
   </script>
 </head>
