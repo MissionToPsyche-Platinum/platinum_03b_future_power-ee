@@ -1,6 +1,6 @@
 # Development of the 16 Psyche Power System Simulator: A Comprehensive Technical Report
 
-**Author:** Manus AI  
+**Author:** Derek Abrassart-White 
 **Date:** February 27, 2026  
 **Version:** 1.7  
 **Project:** 16 Psyche Power System Simulator  

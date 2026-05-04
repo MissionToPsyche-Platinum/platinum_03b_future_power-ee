@@ -14,6 +14,8 @@ import { solveComponentSizing, generateSizingRecommendations } from "@/simulatio
 import { performCostBenefitAnalysis } from "@/simulation/costBenefitAnalysis";
 import { CONFIGURATION_PRESETS } from "@shared/presets";
 import { localConfigs, localSizing, localCostBenefit } from "@/lib/localStore";
+import { getDefaultPsycheMissionTimeline, simulateMissionTimeline } from "@/simulation/missionTimelineSimulation";
+import { runOptimization } from "@/simulation/optimizationEngine";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -199,69 +201,26 @@ async function handleProcedure(path: string, input: unknown): Promise<unknown> {
 
   // ── optimization.run ──────────────────────────────────────────────────────
   if (path === "optimization.run") {
-    // Run a grid search over PV area and battery capacity
-    const i = input as any;
-    const pvAreas = [5, 10, 15, 20, 25, 30];
-    const batteryCapacities = [2000, 5000, 8000, 12000];
-    const results: any[] = [];
-    for (const pvArea of pvAreas) {
-      for (const battCap of batteryCapacities) {
-        try {
-          const r = await runSimulation({
-            concentrator: i.concentrator ?? "None",
-            pvCell: i.pvCell ?? "GaAs Triple Junction",
-            battery: i.battery ?? "Lithium-ion (LiCoO2)",
-            concentratorArea: i.concentratorArea ?? 0,
-            pvArea,
-            batteryCapacity: battCap,
-            baseLoad: i.baseLoad ?? 500,
-            durationHours: 48,
-            yearsInOperation: i.yearsOperation ?? 5,
-            spacecraftClass: "discovery",
-          }, technologies);
-          results.push({ pvArea, batteryCapacity: battCap, metrics: r.metrics });
-        } catch {
-          // skip invalid combos
-        }
-      }
-    }
-    return ok({ results });
+    const result = await runOptimization(input as any);
+    return ok(result);
   }
 
   // ── timeline ──────────────────────────────────────────────────────────────
   if (path === "timeline.getDefaultTimeline") {
-    return ok({
-      phases: [
-        { name: "Launch", startYear: 0, endYear: 0.5, powerRequirement: 800 },
-        { name: "Cruise", startYear: 0.5, endYear: 3.5, powerRequirement: 600 },
-        { name: "Orbit A", startYear: 3.5, endYear: 4.0, powerRequirement: 1200 },
-        { name: "Orbit B", startYear: 4.0, endYear: 4.5, powerRequirement: 1500 },
-        { name: "Orbit C", startYear: 4.5, endYear: 5.0, powerRequirement: 1800 },
-        { name: "Orbit D", startYear: 5.0, endYear: 5.5, powerRequirement: 2000 },
-      ],
-    });
+    return ok(getDefaultPsycheMissionTimeline());
   }
   if (path === "timeline.simulate") {
     const i = input as any;
     const phases = i.phases ?? [];
-    const results = await Promise.all(
-      phases.map(async (phase: any) => {
-        const r = await runSimulation({
-          concentrator: i.concentrator ?? "None",
-          pvCell: i.pvCell ?? "GaAs Triple Junction",
-          battery: i.battery ?? "Lithium-ion (LiCoO2)",
-          concentratorArea: i.concentratorArea ?? 0,
-          pvArea: i.pvArea ?? 20,
-          batteryCapacity: i.batteryCapacity ?? 5000,
-          baseLoad: phase.powerRequirement ?? 500,
-          durationHours: 48,
-          yearsInOperation: phase.startYear ?? 0,
-          spacecraftClass: "discovery",
-        }, technologies);
-        return { phase: phase.name, metrics: r.metrics };
-      })
+    const totalDuration = phases.reduce((sum: number, p: any) => sum + (p.durationYears ?? 0), 0);
+    const timeline = { phases, totalDuration };
+    const result = simulateMissionTimeline(
+      timeline,
+      i.pvArea ?? 20,
+      i.batteryCapacityWh ?? 5000,
+      i.cellType ?? "GaAs Triple Junction"
     );
-    return ok({ phases: results });
+    return ok(result);
   }
 
   // ── system.notifyOwner ────────────────────────────────────────────────────

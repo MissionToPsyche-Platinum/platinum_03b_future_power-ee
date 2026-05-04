@@ -644,8 +644,7 @@ export default function Sizing() {
                     )}
                   </Button>
                   
-                  {user ? (
-                    <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+                  <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
                       <DialogTrigger asChild>
                         <Button
                           className="bg-green-600 hover:bg-green-700 text-white"
@@ -727,16 +726,6 @@ export default function Sizing() {
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
-                  ) : (
-                    <Button
-                      disabled
-                      className="bg-slate-600 text-slate-400 cursor-not-allowed"
-                      size="lg"
-                    >
-                      <Save className="w-4 h-4 mr-2" />
-                      Login to Save
-                    </Button>
-                  )}
                 </div>
 
                 {/* Recommendations */}
